@@ -46,8 +46,16 @@ public class DataSourceAnnotationAdvisor extends AbstractPointcutAdvisor impleme
         return this.advice;
     }
 
+    /**
+     * 实现BeanFactoryAware的bean中获取beanFactory
+     *
+     * @param beanFactory
+     * @throws BeansException
+     */
     @Override
     public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
-
+        if (this.advice instanceof BeanFactoryAware) {
+            ((BeanFactoryAware) this.advice).setBeanFactory(beanFactory);
+        }
     }
 }
