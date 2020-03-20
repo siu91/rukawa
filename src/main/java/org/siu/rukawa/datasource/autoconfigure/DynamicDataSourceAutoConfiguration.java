@@ -5,7 +5,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.siu.rukawa.datasource.autoconfigure.druid.DruidDynamicDataSourceConfiguration;
 import org.siu.rukawa.datasource.autoconfigure.properties.DataSourceProperty;
 import org.siu.rukawa.datasource.autoconfigure.properties.DynamicDataSourceProperties;
+import org.siu.rukawa.datasource.core.aop.DataSourceAnnotationAdvisor;
 import org.siu.rukawa.datasource.core.aop.handler.*;
+import org.siu.rukawa.datasource.core.aop.interceptor.DataSourceAnnotationInterceptor;
 import org.siu.rukawa.datasource.core.provider.DataSourceProvider;
 import org.siu.rukawa.datasource.core.provider.YmlDataSourceProvider;
 import org.siu.rukawa.datasource.core.provider.builder.DataSourceBuilder;
@@ -43,7 +45,7 @@ public class DynamicDataSourceAutoConfiguration {
     private final DynamicDataSourceProperties properties;
 
     /**
-     * 数据源构造工具
+     * 配置数据源构造工具
      *
      * @return
      */
@@ -96,13 +98,27 @@ public class DynamicDataSourceAutoConfiguration {
      */
     @Bean
     @ConditionalOnMissingBean
-    public ChainHandler dynamicFetchDataSourceName() {
+    public ChainHandler dynamicFetchDataSourceNameChainHandler() {
         AbstractDataSourceChainHandler requestHeaderDataSourceHandler = new RequestHeaderDataSourceHandler();
         AbstractDataSourceChainHandler sessionDataSourceHandler = new SessionDataSourceHandler();
         AbstractDataSourceChainHandler spELDataSourceHandler = new SpELDataSourceHandler();
         sessionDataSourceHandler.setNextHandler(spELDataSourceHandler);
         requestHeaderDataSourceHandler.setNextHandler(sessionDataSourceHandler);
         return requestHeaderDataSourceHandler;
+    }
+
+    /**
+     * 配置AOP
+     *
+     * @param dynamicFetchDataSourceNameChainHandler
+     * @return
+     */
+    @Bean
+    @ConditionalOnMissingBean
+    public DataSourceAnnotationAdvisor dataSourceAnnotationAdvisor(ChainHandler dynamicFetchDataSourceNameChainHandler) {
+        DataSourceAnnotationInterceptor interceptor = new DataSourceAnnotationInterceptor();
+        interceptor.setDynamicChainHandler(dynamicFetchDataSourceNameChainHandler);
+        return new DataSourceAnnotationAdvisor(interceptor);
     }
 
 }

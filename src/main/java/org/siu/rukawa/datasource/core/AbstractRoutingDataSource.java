@@ -14,20 +14,20 @@ import java.sql.SQLException;
 public abstract class AbstractRoutingDataSource extends AbstractDataSource {
 
     /**
-     * 子类实现决定最终数据源
+     * 子类实现查找最终的数据源
      *
      * @return 数据源
      */
-    protected abstract DataSource determineDataSource();
+    protected abstract DataSource lookupDataSource();
 
     @Override
     public Connection getConnection() throws SQLException {
-        return determineDataSource().getConnection();
+        return lookupDataSource().getConnection();
     }
 
     @Override
     public Connection getConnection(String username, String password) throws SQLException {
-        return determineDataSource().getConnection(username, password);
+        return lookupDataSource().getConnection(username, password);
     }
 
     @Override
@@ -36,11 +36,11 @@ public abstract class AbstractRoutingDataSource extends AbstractDataSource {
         if (iface.isInstance(this)) {
             return (T) this;
         }
-        return determineDataSource().unwrap(iface);
+        return lookupDataSource().unwrap(iface);
     }
 
     @Override
     public boolean isWrapperFor(Class<?> iface) throws SQLException {
-        return (iface.isInstance(this) || determineDataSource().isWrapperFor(iface));
+        return (iface.isInstance(this) || lookupDataSource().isWrapperFor(iface));
     }
 }

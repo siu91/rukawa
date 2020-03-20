@@ -12,6 +12,8 @@ import org.aopalliance.intercept.MethodInvocation;
 public interface ChainHandler {
 
     /**
+     * 处理注解中的数据源标识
+     *
      * @param invocation
      * @param key
      * @return
