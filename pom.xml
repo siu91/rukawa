@@ -35,6 +35,7 @@
 
     <groupId>org.siu</groupId>
     <artifactId>rukawa</artifactId>
+    <version>1.0.0.RC1</version>
     <packaging>jar</packaging>
     <description>rukawa</description>
     <url>https://github.com/siu91</url>
