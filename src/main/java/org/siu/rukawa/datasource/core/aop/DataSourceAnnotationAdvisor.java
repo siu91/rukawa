@@ -11,6 +11,7 @@ import org.springframework.aop.support.annotation.AnnotationMatchingPointcut;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
+import org.springframework.core.Ordered;
 
 /**
  * AOP 处理DataSource注解
@@ -32,6 +33,7 @@ public class DataSourceAnnotationAdvisor extends AbstractPointcutAdvisor impleme
         Pointcut classLevelPointCut = new AnnotationMatchingPointcut(DataSource.class, true);
         Pointcut methodLevelPointCut = AnnotationMatchingPointcut.forMethodAnnotation(DataSource.class);
         this.pointcut = new ComposablePointcut(classLevelPointCut).union(methodLevelPointCut);
+        this.setOrder(Ordered.HIGHEST_PRECEDENCE);
     }
 
     @Override
