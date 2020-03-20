@@ -9,6 +9,7 @@ import org.siu.rukawa.datasource.core.strategy.DataSourceSelectionStrategy;
 import org.siu.rukawa.datasource.core.strategy.LoadBalanceDataSourceSelectionStrategy;
 import org.siu.rukawa.datasource.support.P6SpyMessageFormat;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
 import org.springframework.core.Ordered;
 import org.springframework.util.StringUtils;
@@ -25,6 +26,7 @@ import java.util.Map;
  */
 @Slf4j
 @Data
+@ConfigurationProperties(prefix = DynamicDataSourceProperties.PREFIX)
 public class DynamicDataSourceProperties implements InitializingBean {
     public static final String PREFIX = "spring.datasource.dynamic";
 
