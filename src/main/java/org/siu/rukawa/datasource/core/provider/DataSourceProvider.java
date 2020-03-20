@@ -1,5 +1,6 @@
 package org.siu.rukawa.datasource.core.provider;
 
+import org.siu.rukawa.datasource.core.exception.DynamicDataSourceError;
 import org.siu.rukawa.datasource.core.model.DataSourceDefinition;
 
 import java.util.List;
@@ -16,6 +17,6 @@ public interface DataSourceProvider {
      *
      * @return
      */
-    List<DataSourceDefinition> buildDataSources();
+    List<DataSourceDefinition> buildDataSources() throws DynamicDataSourceError;
 
 }

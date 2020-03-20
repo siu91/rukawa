@@ -2,6 +2,7 @@ package org.siu.rukawa.datasource.core.provider;
 
 import lombok.extern.slf4j.Slf4j;
 import org.siu.rukawa.datasource.autoconfigure.properties.DataSourceProperty;
+import org.siu.rukawa.datasource.core.exception.DynamicDataSourceError;
 import org.siu.rukawa.datasource.core.model.DataSourceDefinition;
 import org.siu.rukawa.datasource.core.provider.builder.DataSourceBuilder;
 import org.siu.rukawa.datasource.core.provider.warp.DataSourceWarp;
@@ -29,10 +30,10 @@ public abstract class AbstractDataSourceProvider implements DataSourceProvider {
     /**
      * 从配置中构建所有数据源
      *
-     * @param dataSourcePropertiesMap
      * @return
      */
-    protected List<DataSourceDefinition> buildDataSources(Map<String, DataSourceProperty> dataSourcePropertiesMap) {
+    protected List<DataSourceDefinition> doBuildDataSources() throws DynamicDataSourceError {
+        Map<String, DataSourceProperty> dataSourcePropertiesMap = dataSourceBuilder.getProperties().getDatasourceMap();
         List<DataSourceDefinition> dataSourceDefinitionList = new LinkedList<>();
 
         for (Map.Entry<String, DataSourceProperty> item : dataSourcePropertiesMap.entrySet()) {

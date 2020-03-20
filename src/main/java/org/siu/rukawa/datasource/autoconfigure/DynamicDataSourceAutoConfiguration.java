@@ -2,7 +2,6 @@ package org.siu.rukawa.datasource.autoconfigure;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.siu.rukawa.datasource.autoconfigure.properties.DataSourceProperty;
 import org.siu.rukawa.datasource.autoconfigure.properties.DynamicDataSourceProperties;
 import org.siu.rukawa.datasource.core.aop.DataSourceAnnotationAdvisor;
 import org.siu.rukawa.datasource.core.aop.handler.*;
@@ -21,9 +20,7 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 
-import java.util.Map;
 
 /**
  * 自动配置
@@ -83,8 +80,7 @@ public class DynamicDataSourceAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean
     public DataSourceProvider dynamicDataSourceProvider() {
-        Map<String, DataSourceProperty> dataSourcePropertyMap = properties.getDatasourceMap();
-        return new YmlDataSourceProvider(dataSourcePropertyMap);
+        return new YmlDataSourceProvider();
     }
 
 

@@ -3,6 +3,7 @@ package org.siu.rukawa.datasource.core;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.siu.rukawa.datasource.context.DynamicDataSourceContextHolder;
+import org.siu.rukawa.datasource.core.exception.DynamicDataSourceError;
 import org.siu.rukawa.datasource.core.exception.NotFoundPrimaryDataSourceError;
 import org.siu.rukawa.datasource.core.model.DataSourceContainer;
 import org.siu.rukawa.datasource.core.model.DataSourceDefinition;
@@ -38,7 +39,7 @@ public class DynamicRoutingDataSource extends AbstractRoutingDataSource implemen
     private String primary;
 
     @Override
-    public void afterPropertiesSet() throws NotFoundPrimaryDataSourceError {
+    public void afterPropertiesSet() throws DynamicDataSourceError {
         // 创建数据源
         List<DataSourceDefinition> dataSources = this.provider.buildDataSources();
         // 加载数据源到容器中

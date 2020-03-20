@@ -2,6 +2,7 @@ package org.siu.rukawa.datasource.core.provider.builder;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.siu.rukawa.datasource.autoconfigure.properties.DataSourceProperty;
 import org.siu.rukawa.datasource.autoconfigure.properties.DynamicDataSourceProperties;
@@ -23,6 +24,7 @@ import java.lang.reflect.Method;
 @Slf4j
 public class DataSourceBuilder {
 
+    @Getter
     private DynamicDataSourceProperties properties;
 
     public DataSourceBuilder(DynamicDataSourceProperties properties) {
