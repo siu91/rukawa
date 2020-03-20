@@ -1,6 +1,7 @@
 package org.siu.rukawa.datasource.autoconfigure.properties;
 
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 import javax.sql.DataSource;
 
@@ -12,8 +13,12 @@ import javax.sql.DataSource;
  * @Version 0.0.1
  */
 @Data
+@Accessors(chain = true)
 public class DataSourceProperty {
 
+    /**
+     * 非空时即启用
+     */
     private String jndi;
 
     /**
@@ -21,4 +26,25 @@ public class DataSourceProperty {
      * 如 Druid、HikariCp
      */
     private Class<? extends DataSource> type;
+
+
+    /**
+     * driver
+     */
+    private String driverClassName;
+
+    /**
+     * url
+     */
+    private String url;
+
+    /**
+     * username
+     */
+    private String username;
+
+    /**
+     * Jpassword
+     */
+    private String password;
 }

@@ -2,7 +2,6 @@ package org.siu.rukawa.datasource.autoconfigure;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.siu.rukawa.datasource.autoconfigure.druid.DruidDynamicDataSourceConfiguration;
 import org.siu.rukawa.datasource.autoconfigure.properties.DataSourceProperty;
 import org.siu.rukawa.datasource.autoconfigure.properties.DynamicDataSourceProperties;
 import org.siu.rukawa.datasource.core.aop.DataSourceAnnotationAdvisor;
@@ -38,7 +37,6 @@ import java.util.Map;
 @AllArgsConstructor
 @EnableConfigurationProperties(DynamicDataSourceProperties.class)
 @AutoConfigureBefore(DataSourceAutoConfiguration.class)
-@Import(value = {DruidDynamicDataSourceConfiguration.class})
 @ConditionalOnProperty(prefix = DynamicDataSourceProperties.PREFIX, name = "enabled", havingValue = "true", matchIfMissing = true)
 public class DynamicDataSourceAutoConfiguration {
 
@@ -52,7 +50,7 @@ public class DynamicDataSourceAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean
     public DataSourceBuilder dataSourceBuilder() {
-        return new DataSourceBuilder();
+        return new DataSourceBuilder(properties);
     }
 
 

@@ -1,6 +1,7 @@
 package org.siu.rukawa.datasource.autoconfigure.properties;
 
 import com.p6spy.engine.spy.appender.MessageFormattingStrategy;
+import com.zaxxer.hikari.HikariConfig;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.siu.rukawa.datasource.core.exception.NotFoundPrimaryDataSourceError;
@@ -8,6 +9,7 @@ import org.siu.rukawa.datasource.core.strategy.DataSourceSelectionStrategy;
 import org.siu.rukawa.datasource.core.strategy.LoadBalanceDataSourceSelectionStrategy;
 import org.siu.rukawa.datasource.support.P6SpyMessageFormat;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.boot.context.properties.NestedConfigurationProperty;
 import org.springframework.core.Ordered;
 import org.springframework.util.StringUtils;
 
@@ -73,6 +75,12 @@ public class DynamicDataSourceProperties implements InitializingBean {
      * 切面优先级
      */
     private Integer order = Ordered.HIGHEST_PRECEDENCE;
+
+    /**
+     * HikariCp全局参数配置
+     */
+    @NestedConfigurationProperty
+    private HikariConfig hikari = new HikariConfig();
 
 
 }
