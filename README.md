@@ -2,7 +2,7 @@
 
 # Rukawa <img src="./assets/LOGO.png" align="right" />
 
-> **rukawa**是一个通用的动态数据源工具
+> **rukawa**是一个基于SpringBoot的动态数据源工具Starter
 
 
 
@@ -30,7 +30,7 @@
 
 ## Quick Start
 
-* git clone & mvn install  到本地（todo 发布到maven）
+* git clone & mvn install  到本地（todo	 发布到maven）
 
 * Add dependency
 
