@@ -5,27 +5,27 @@ spring:
         master:
           username: db_username
           password: db_pass
-          url: jdbc:postgresql://postgres.host:5432/ganxu?currentSchema=ganxu&useSSL=false&serverTimezone=GMT%2B8&autoReconnect=true
+          url: jdbc:postgresql://postgres.host:5432
           driver-class-name: org.postgresql.Driver
-        tenant1_1:
+        slave0_0:
           username: db_username
           password: db_pass
-          url: jdbc:postgresql://postgres.host:5432/ganxu?currentSchema=ganxu&useSSL=false&serverTimezone=GMT%2B8&autoReconnect=true
+          url: jdbc:postgresql://postgres.host:5432/
           driver-class-name: org.postgresql.Driver
-        tenant1_2:
+        slave0_1:
           username: db_username
           password: db_pass
-          url: jdbc:postgresql://postgres.host:5432/ganxu?currentSchema=ganxu&useSSL=false&serverTimezone=GMT%2B8&autoReconnect=true
+          url: jdbc:postgresql://postgres.host:5432/
           driver-class-name: org.postgresql.Driver
-        tenant2_1:
+        slave1_0:
           username: db_username
           password: db_pass
-          url: jdbc:postgresql://postgres.host:5432/ganxu?currentSchema=ganxu&useSSL=false&serverTimezone=GMT%2B8&autoReconnect=true
+          url: jdbc:postgresql://postgres.host:5432/
           driver-class-name: org.postgresql.Driver
-        tenant2_2:
+        slave1_1:
           username: db_username
           password: db_pass
-          url: jdbc:postgresql://postgres.host:5432/ganxu?currentSchema=ganxu&useSSL=false&serverTimezone=GMT%2B8&autoReconnect=true
+          url: jdbc:postgresql://postgres.host:5432/
           driver-class-name: org.postgresql.Driver
       primary: db_master
       hikari:
