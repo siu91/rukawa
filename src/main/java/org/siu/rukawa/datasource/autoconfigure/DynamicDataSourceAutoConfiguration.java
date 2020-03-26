@@ -3,6 +3,7 @@ package org.siu.rukawa.datasource.autoconfigure;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.siu.rukawa.datasource.autoconfigure.properties.DynamicDataSourceProperties;
+import org.siu.rukawa.datasource.core.DynamicRoutingDataSource;
 import org.siu.rukawa.datasource.core.aop.DataSourceAnnotationAdvisor;
 import org.siu.rukawa.datasource.core.aop.handler.*;
 import org.siu.rukawa.datasource.core.aop.interceptor.DataSourceAnnotationInterceptor;
@@ -20,6 +21,8 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import javax.sql.DataSource;
 
 
 /**
@@ -114,5 +117,13 @@ public class DynamicDataSourceAutoConfiguration {
         interceptor.setDynamicChainHandler(dynamicFetchDataSourceNameChainHandler);
         return new DataSourceAnnotationAdvisor(interceptor);
     }
+
+
+    @Bean
+    @ConditionalOnMissingBean
+    public DataSource dataSource() {
+        return new DynamicRoutingDataSource();
+    }
+
 
 }
