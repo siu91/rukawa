@@ -105,6 +105,14 @@
             <optional>true</optional>
         </dependency>
 
+        <!--使用 Spring Boot Configuration Processor 完成自动补全-->
+        <!--重新 build 项目之后，configuration processor 会为我们创建一个 JSON 文件-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+
 
     </dependencies>
 
