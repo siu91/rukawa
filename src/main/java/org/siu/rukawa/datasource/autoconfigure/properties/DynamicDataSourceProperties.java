@@ -36,12 +36,15 @@ public class DynamicDataSourceProperties implements InitializingBean {
     @Override
     public void afterPropertiesSet() throws Exception {
         // 如果 configServer不为空，从远端拉取配置
-        if (!StringUtils.hasText(this.configServer)) {
-            JSONObject remoteProperties = PropertiesUtil.loadJsonPropertiesFormRemote();
-            remoteProperties.forEach((k, v) -> {
-                DataSourceProperty dataSourceProperty = JSON.parseObject(v.toString(), DataSourceProperty.class);
-                this.datasourceMap.put(k,dataSourceProperty);
-            });
+        if (StringUtils.hasText(this.configServer)) {
+            // 只配置datasourceMap
+            JSONObject remoteProperties = PropertiesUtil.loadJsonPropertiesFormRemoteServer(this.configServer);
+            if (remoteProperties != null) {
+                remoteProperties.forEach((k, v) -> {
+                    DataSourceProperty dataSourceProperty = JSON.parseObject(v.toString(), DataSourceProperty.class);
+                    this.datasourceMap.put(k, dataSourceProperty);
+                });
+            }
         }
 
         if (!StringUtils.hasText(primary)) {

@@ -121,8 +121,11 @@ public class DynamicDataSourceAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public DataSource dataSource() {
-        return new DynamicRoutingDataSource();
+    public DataSource dataSource(DataSourceProvider provider) {
+        DynamicRoutingDataSource dynamicRoutingDataSource = new DynamicRoutingDataSource();
+        dynamicRoutingDataSource.setPrimary(this.properties.getPrimary());
+        dynamicRoutingDataSource.setProvider(provider);
+        return dynamicRoutingDataSource;
     }
 
 

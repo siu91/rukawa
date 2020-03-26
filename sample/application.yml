@@ -2,6 +2,8 @@ spring:
   datasource:
     dynamic:
       datasource-map:
+        # 从远端服务加载数据源配置（会覆盖本地配置）
+        config-server: "https://www.fastmock.site/mock/3f0e3977225eecebe94d28842267a2e0/myboot/api/rukawa_db_properties"
         master:
           username: db_username
           password: db_pass
