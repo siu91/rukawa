@@ -1,5 +1,7 @@
 package org.siu.rukawa.datasource.autoconfigure.properties;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.p6spy.engine.spy.appender.MessageFormattingStrategy;
 import com.zaxxer.hikari.HikariConfig;
 import lombok.Data;
@@ -8,6 +10,7 @@ import org.siu.rukawa.datasource.core.exception.NotFoundPrimaryDataSourceError;
 import org.siu.rukawa.datasource.core.strategy.DataSourceSelectionStrategy;
 import org.siu.rukawa.datasource.core.strategy.LoadBalanceDataSourceSelectionStrategy;
 import org.siu.rukawa.datasource.support.P6SpyMessageFormat;
+import org.siu.rukawa.datasource.support.PropertiesUtil;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
@@ -32,6 +35,15 @@ public class DynamicDataSourceProperties implements InitializingBean {
 
     @Override
     public void afterPropertiesSet() throws Exception {
+        // 如果 configServer不为空，从远端拉取配置
+        if (!StringUtils.hasText(this.configServer)) {
+            JSONObject remoteProperties = PropertiesUtil.loadJsonPropertiesFormRemote();
+            remoteProperties.forEach((k, v) -> {
+                DataSourceProperty dataSourceProperty = JSON.parseObject(v.toString(), DataSourceProperty.class);
+                this.datasourceMap.put(k,dataSourceProperty);
+            });
+        }
+
         if (!StringUtils.hasText(primary)) {
             // 未设置主数据源，默认设置第一个数据源为主数据源
             this.primary = datasourceMap.keySet().toArray(new String[this.datasourceMap.size()])[0];
@@ -44,6 +56,12 @@ public class DynamicDataSourceProperties implements InitializingBean {
             }
         }
     }
+
+
+    /**
+     * 远端配置服务端接口：默认为空，有效配置后，会从远端拉取配置覆盖本地
+     */
+    private String configServer;
 
     /**
      * 未设置主数据源，默认设置第一个数据源为主数据源
