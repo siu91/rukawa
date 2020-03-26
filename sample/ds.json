@@ -1,0 +1,13 @@
+{
+  "code":200,
+  "message":"success",
+  "data":{
+    "master":{
+      "url":"jdbc:postgresql://postgres.host:5432",
+      "driver-class-name":"org.postgresql.Driver",
+      "username":"username",
+      "password":"password"
+
+    }
+  }
+}
