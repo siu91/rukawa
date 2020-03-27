@@ -133,21 +133,15 @@
   
       @Test
       public void test() {
-          AddDataSourceEvent event = new AddDataSourceEvent("{\n" +
-                  "  \"code\":200,\n" +
-                  "  \"message\":\"success\",\n" +
-                  "  \"data\":{\n" +
-                  "    \"master\":{\n" +
-                  "      \"url\":\"jdbc:postgresql://postgres.host:5432\",\n" +
-                  "      \"driver-class-name\":\"org.postgresql.Driver\",\n" +
-                  "      \"username\":\"username\",\n" +
-                  "      \"password\":\"password\"\n" +
-                  "\n" +
-                  "    }\n" +
-                  "  }\n" +
-                  "}");
+          DataSourceProperty property = new DataSourceProperty();
+          property.setDriverClassName("org.h2.Driver");
+          property.setUrl("jdbc:h2:mem:test");
+          property.setUsername("sa");
+          property.setPassword("");
   
+          AddDataSourceEvent event = new AddDataSourceEvent("tets111", property);
           eventListener.publishEvent(event);
+      
       }
    ```
 
