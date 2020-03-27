@@ -1,5 +1,6 @@
 package org.siu.rukawa.datasource.core.provider;
 
+import org.siu.rukawa.datasource.autoconfigure.properties.DataSourceProperty;
 import org.siu.rukawa.datasource.core.exception.DynamicDataSourceError;
 import org.siu.rukawa.datasource.core.model.DataSourceDefinition;
 
@@ -18,5 +19,7 @@ public interface DataSourceProvider {
      * @return
      */
     List<DataSourceDefinition> buildDataSources() throws DynamicDataSourceError;
+
+    DataSourceDefinition buildOne(DataSourceProperty property);
 
 }

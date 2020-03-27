@@ -153,7 +153,7 @@ public class DataSourceContainer {
      *
      * @param dsd 数据源定义
      */
-    private synchronized void add(DataSourceDefinition dsd) {
+    public synchronized void add(DataSourceDefinition dsd) {
         if (!dataSources.containsKey(dsd.getKey())) {
             dataSources.put(dsd.getKey(), dsd.getDataSource());
             this.addGroup(dsd);

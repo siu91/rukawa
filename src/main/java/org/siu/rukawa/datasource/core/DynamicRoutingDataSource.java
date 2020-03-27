@@ -1,7 +1,9 @@
 package org.siu.rukawa.datasource.core;
 
+import com.alibaba.fastjson.JSON;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.siu.rukawa.datasource.autoconfigure.properties.DataSourceProperty;
 import org.siu.rukawa.datasource.context.DynamicDataSourceContextHolder;
 import org.siu.rukawa.datasource.core.event.AddDataSourceEvent;
 import org.siu.rukawa.datasource.core.exception.DynamicDataSourceError;
@@ -24,7 +26,7 @@ import java.util.List;
  * @Version 0.0.1
  */
 @Slf4j
-public class DynamicRoutingDataSource extends AbstractRoutingDataSource implements InitializingBean, DisposableBean , ApplicationListener<AddDataSourceEvent> {
+public class DynamicRoutingDataSource extends AbstractRoutingDataSource implements InitializingBean, DisposableBean, ApplicationListener<AddDataSourceEvent> {
 
     @Setter
     private DataSourceProvider provider;
@@ -66,8 +68,12 @@ public class DynamicRoutingDataSource extends AbstractRoutingDataSource implemen
 
     @Override
     public void onApplicationEvent(AddDataSourceEvent addDataSourceEvent) {
-        // TODO 动态添加数据源
+        // TODO 动态添加数据源：构建单个数据源
         log.info("动态添加数据源：{}", addDataSourceEvent.getSource());
+        DataSourceProperty property = JSON.parseObject(addDataSourceEvent.getSource().toString(), DataSourceProperty.class);
+        DataSourceDefinition dataSourceDefinition = this.provider.buildOne(property);
+        // TODO 判断是否重复的数据眼配置，按照什么策略处理
+        this.dataSourceContainer.add(dataSourceDefinition);
     }
 
    /* @Async

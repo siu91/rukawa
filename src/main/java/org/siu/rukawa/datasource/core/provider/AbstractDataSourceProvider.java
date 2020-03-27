@@ -48,4 +48,8 @@ public abstract class AbstractDataSourceProvider implements DataSourceProvider {
     }
 
 
+    @Override
+    public DataSourceDefinition buildOne(DataSourceProperty property){
+        return null;
+    }
 }

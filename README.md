@@ -23,6 +23,8 @@
 ## Features
 
 - 支持动态多数据源
+- 支持远端接口获取数据源配置
+- 支持动态增加数据源
 - 支持p6spy监控sql，支持自定义sql日志输出
 - 支持分布式事务seata
 - 支持mybatis插件实现读写分离
@@ -48,6 +50,9 @@
   spring:
     datasource:
       dynamic:
+        remote:
+          # 从远端服务加载数据源配置（会覆盖本地配置）
+          config-endpoint: "https://xxx/api/rukawa_db_properties"
         datasource-map:
           master:
             username: db_username
@@ -76,49 +81,75 @@
             driver-class-name: org.postgresql.Driver
   ```
 
-- 代码部分
+- @DataSource使用
 
   ```java
   // 推荐在方法上使用
-  // 如：你在控制层class上使用，但是其他人添加了某块代码并不需要动态切换数据源
-  
-  
-  // Usage1:在控制层Class使用注解
-  @RestController
-  @DataSource("slave1_1") 
-  // Or @DataSource("#header.request_ds") // HttpRequest header 添加 request_ds='slave1_1'
-  // Or @DataSource("#session.request_ds") // HttpRequest session 添加 request_ds='slave1_1'
-  public class Controller {
-  }
-  
-  // Usage2:在Method上使用注解
-  public class ServiceImpl implements Service {
-  
-    @Override
-    @DataSource("#session.request_ds")
-    public Object session() {
-      // do something
+    // 如：你在控制层class上使用，但是其他人添加了某块代码并不需要动态切换数据源
+    
+    
+    // Usage1:在控制层Class使用注解
+    @RestController
+    @DataSource("slave1_1") 
+    // Or @DataSource("#header.request_ds") // HttpRequest header 添加 request_ds='slave1_1'
+    // Or @DataSource("#session.request_ds") // HttpRequest session 添加 request_ds='slave1_1'
+    public class Controller {
     }
-  
-    @Override
-    @DataSource("#header.request_ds")
-    public Object header() {
-      // do something
+    
+    // Usage2:在Method上使用注解
+    public class ServiceImpl implements Service {
+    
+      @Override
+      @DataSource("#session.request_ds")
+      public Object session() {
+        // do something
+      }
+    
+      @Override
+      @DataSource("#header.request_ds")
+      public Object header() {
+        // do something
+      }
+    
+      @Override
+      @DataSource("#requestObj.ds")
+      public Object spEL(RequestObj requestObj) {
+        // do something
+      }
+    
+      @Override
+      @DataSource("slave1_1")
+      public Object derict() {
+        // do something
+      }
     }
-  
-    @Override
-    @DataSource("#requestObj.ds")
-    public Object spEL(RequestObj requestObj) {
-      // do something
-    }
-  
-    @Override
-    @DataSource("slave1_1")
-    public Object derict() {
-      // do something
-    }
-  }
   ```
+
+- 动态添加数据源（监听模式）
+
+   ```java
+      @Resource
+      EventListener eventListener;
+  
+      @Test
+      public void test() {
+          AddDataSourceEvent event = new AddDataSourceEvent("{\n" +
+                  "  \"code\":200,\n" +
+                  "  \"message\":\"success\",\n" +
+                  "  \"data\":{\n" +
+                  "    \"master\":{\n" +
+                  "      \"url\":\"jdbc:postgresql://postgres.host:5432\",\n" +
+                  "      \"driver-class-name\":\"org.postgresql.Driver\",\n" +
+                  "      \"username\":\"username\",\n" +
+                  "      \"password\":\"password\"\n" +
+                  "\n" +
+                  "    }\n" +
+                  "  }\n" +
+                  "}");
+  
+          eventListener.publishEvent(event);
+      }
+   ```
 
   
 
