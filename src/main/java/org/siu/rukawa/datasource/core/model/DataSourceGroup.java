@@ -3,6 +3,8 @@ package org.siu.rukawa.datasource.core.model;
 import lombok.Getter;
 import org.siu.rukawa.datasource.core.strategy.DataSourceSelectionStrategy;
 import org.siu.rukawa.datasource.core.strategy.LoadBalanceDataSourceSelectionStrategy;
+import org.siu.rukawa.datasource.core.strategy.RandomDataSourceSelectionStrategy;
+import org.siu.rukawa.datasource.core.strategy.Strategy;
 
 import javax.sql.DataSource;
 import java.util.ArrayList;
@@ -38,6 +40,11 @@ public class DataSourceGroup {
         this.strategy = strategy;
     }
 
+    public DataSourceGroup(String name, Strategy strategy) {
+        this.name = name;
+        this.dataSources = new ArrayList<>();
+        this.strategy = Strategy.RANDOM == strategy ? new RandomDataSourceSelectionStrategy() : new LoadBalanceDataSourceSelectionStrategy();
+    }
 
     /**
      * 添加数据源

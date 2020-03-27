@@ -13,6 +13,7 @@ import org.siu.rukawa.datasource.core.exception.NotFoundPrimaryDataSourceError;
 import org.siu.rukawa.datasource.core.model.DataSourceContainer;
 import org.siu.rukawa.datasource.core.model.DataSourceDefinition;
 import org.siu.rukawa.datasource.core.provider.DataSourceProvider;
+import org.siu.rukawa.datasource.core.strategy.Strategy;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationListener;
@@ -44,12 +45,16 @@ public class DynamicRoutingDataSource extends AbstractRoutingDataSource implemen
     @Setter
     private String primary;
 
+    @Setter
+    private Strategy strategy;
+
+
     @Override
     public void afterPropertiesSet() throws DynamicDataSourceError {
         // 创建数据源
         List<DataSourceDefinition> dataSources = this.provider.buildDataSources();
         // 加载数据源到容器中
-        this.dataSourceContainer = new DataSourceContainer(this.primary);
+        this.dataSourceContainer = new DataSourceContainer(this.primary, this.strategy);
         this.dataSourceContainer.load(dataSources);
         // 刷新容器中数据源
         this.dataSourceContainer.flush();

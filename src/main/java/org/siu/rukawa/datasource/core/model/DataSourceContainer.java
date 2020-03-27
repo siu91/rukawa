@@ -3,6 +3,7 @@ package org.siu.rukawa.datasource.core.model;
 import com.p6spy.engine.spy.P6DataSource;
 import io.seata.rm.datasource.DataSourceProxy;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
 
@@ -17,6 +18,7 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.siu.rukawa.datasource.core.exception.NotFoundPrimaryDataSourceError;
+import org.siu.rukawa.datasource.core.strategy.Strategy;
 import org.springframework.util.StringUtils;
 
 /**
@@ -42,6 +44,8 @@ public class DataSourceContainer {
     @Getter
     private String primary;
 
+    private Strategy strategy;
+
     /**
      * 所有数据源
      */
@@ -56,7 +60,7 @@ public class DataSourceContainer {
     private Map<String, DataSourceGroup> groups;
 
 
-    public DataSourceContainer(String primary) {
+    public DataSourceContainer(String primary, Strategy strategy) {
         this.id = UUID.randomUUID().toString().replace("-", "");
         this.primary = primary;
         this.dataSources = new LinkedHashMap<>();
@@ -175,7 +179,7 @@ public class DataSourceContainer {
                 groups.get(dsd.getGroup()).add(dsd.getDataSource());
             } else {
                 try {
-                    DataSourceGroup datasourceGroup = new DataSourceGroup(dsd.getGroup());
+                    DataSourceGroup datasourceGroup = new DataSourceGroup(dsd.getGroup(), this.strategy);
                     datasourceGroup.add(dsd.getDataSource());
                     groups.put(dsd.getGroup(), datasourceGroup);
                 } catch (Exception e) {
