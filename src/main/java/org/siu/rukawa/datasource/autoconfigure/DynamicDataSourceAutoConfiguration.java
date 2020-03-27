@@ -109,12 +109,7 @@ public class DynamicDataSourceAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean
     public ChainHandler dynamicFetchDataSourceNameChainHandler() {
-        AbstractDataSourceChainHandler requestHeaderDataSourceHandler = new RequestHeaderDataSourceHandler();
-        AbstractDataSourceChainHandler sessionDataSourceHandler = new SessionDataSourceHandler();
-        AbstractDataSourceChainHandler spELDataSourceHandler = new SpELDataSourceHandler();
-        sessionDataSourceHandler.setNextHandler(spELDataSourceHandler);
-        requestHeaderDataSourceHandler.setNextHandler(sessionDataSourceHandler);
-        return requestHeaderDataSourceHandler;
+        return ChainHandlerBuilder.buildChainHandler(this.properties.getHandlerOrder());
     }
 
     /**

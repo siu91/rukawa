@@ -7,9 +7,6 @@ import com.zaxxer.hikari.HikariConfig;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.siu.rukawa.datasource.core.exception.NotFoundPrimaryDataSourceError;
-import org.siu.rukawa.datasource.core.strategy.DataSourceSelectionStrategy;
-import org.siu.rukawa.datasource.core.strategy.LoadBalanceDataSourceSelectionStrategy;
-import org.siu.rukawa.datasource.core.strategy.Strategy;
 import org.siu.rukawa.datasource.support.P6SpyMessageFormat;
 import org.siu.rukawa.datasource.support.PropertiesUtil;
 import org.springframework.beans.factory.InitializingBean;
@@ -95,6 +92,11 @@ public class DynamicDataSourceProperties implements InitializingBean {
      * 分组数据源时，选择算法,默认一组数据源内使用负载均衡算法
      */
     private Strategy strategy = Strategy.LOAD_BALANCE;
+
+    /**
+     * aop 处理器执行顺序，默认 header>session>SpEL
+     */
+    private ChainHandlerOrder handlerOrder = ChainHandlerOrder.HEADER_SESSION_SEPL;
     /**
      * 切面优先级
      */

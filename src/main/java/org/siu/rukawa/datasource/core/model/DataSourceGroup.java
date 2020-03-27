@@ -4,7 +4,7 @@ import lombok.Getter;
 import org.siu.rukawa.datasource.core.strategy.DataSourceSelectionStrategy;
 import org.siu.rukawa.datasource.core.strategy.LoadBalanceDataSourceSelectionStrategy;
 import org.siu.rukawa.datasource.core.strategy.RandomDataSourceSelectionStrategy;
-import org.siu.rukawa.datasource.core.strategy.Strategy;
+import org.siu.rukawa.datasource.autoconfigure.properties.Strategy;
 
 import javax.sql.DataSource;
 import java.util.ArrayList;

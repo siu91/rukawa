@@ -1,7 +1,5 @@
 package org.siu.rukawa.datasource.core;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -9,11 +7,10 @@ import org.siu.rukawa.datasource.autoconfigure.properties.DataSourceProperty;
 import org.siu.rukawa.datasource.context.DynamicDataSourceContextHolder;
 import org.siu.rukawa.datasource.core.event.AddDataSourceEvent;
 import org.siu.rukawa.datasource.core.exception.DynamicDataSourceError;
-import org.siu.rukawa.datasource.core.exception.NotFoundPrimaryDataSourceError;
 import org.siu.rukawa.datasource.core.model.DataSourceContainer;
 import org.siu.rukawa.datasource.core.model.DataSourceDefinition;
 import org.siu.rukawa.datasource.core.provider.DataSourceProvider;
-import org.siu.rukawa.datasource.core.strategy.Strategy;
+import org.siu.rukawa.datasource.autoconfigure.properties.Strategy;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationListener;

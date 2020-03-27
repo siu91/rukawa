@@ -3,7 +3,6 @@ package org.siu.rukawa.datasource.core.model;
 import com.p6spy.engine.spy.P6DataSource;
 import io.seata.rm.datasource.DataSourceProxy;
 import lombok.Getter;
-import lombok.Setter;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
 
@@ -18,7 +17,7 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.siu.rukawa.datasource.core.exception.NotFoundPrimaryDataSourceError;
-import org.siu.rukawa.datasource.core.strategy.Strategy;
+import org.siu.rukawa.datasource.autoconfigure.properties.Strategy;
 import org.springframework.util.StringUtils;
 
 /**

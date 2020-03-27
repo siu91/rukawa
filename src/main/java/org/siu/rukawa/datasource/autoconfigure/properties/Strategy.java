@@ -1,4 +1,4 @@
-package org.siu.rukawa.datasource.core.strategy;
+package org.siu.rukawa.datasource.autoconfigure.properties;
 
 /**
  * 策略枚举
