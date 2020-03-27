@@ -7,7 +7,7 @@ import org.siu.rukawa.datasource.core.DynamicRoutingDataSource;
 import org.siu.rukawa.datasource.core.aop.DataSourceAnnotationAdvisor;
 import org.siu.rukawa.datasource.core.aop.handler.*;
 import org.siu.rukawa.datasource.core.aop.interceptor.DataSourceAnnotationInterceptor;
-import org.siu.rukawa.datasource.core.event.EventListener;
+import org.siu.rukawa.datasource.core.event.EventPublisher;
 import org.siu.rukawa.datasource.core.provider.DataSourceProvider;
 import org.siu.rukawa.datasource.core.provider.YmlDataSourceProvider;
 import org.siu.rukawa.datasource.core.provider.builder.DataSourceBuilder;
@@ -50,8 +50,8 @@ public class DynamicDataSourceAutoConfiguration {
      */
     @Bean
     @ConditionalOnMissingBean
-    public EventListener eventListener() {
-        return new EventListener();
+    public EventPublisher eventListener() {
+        return new EventPublisher();
     }
 
 

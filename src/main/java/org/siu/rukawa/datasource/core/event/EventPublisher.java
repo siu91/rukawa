@@ -7,14 +7,14 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ApplicationEvent;
 
 /**
- * 监听器
+ * 事件发布
  *
  * @Author Siu
  * @Date 2020/3/27 9:15
  * @Version 0.0.1
  */
 @Slf4j
-public class EventListener implements ApplicationContextAware {
+public class EventPublisher implements ApplicationContextAware {
 
     private ApplicationContext applicationContext = null;
 
