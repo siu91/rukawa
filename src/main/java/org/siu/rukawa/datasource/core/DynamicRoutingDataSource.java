@@ -3,6 +3,7 @@ package org.siu.rukawa.datasource.core;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.siu.rukawa.datasource.context.DynamicDataSourceContextHolder;
+import org.siu.rukawa.datasource.core.event.AddDataSourceEvent;
 import org.siu.rukawa.datasource.core.exception.DynamicDataSourceError;
 import org.siu.rukawa.datasource.core.exception.NotFoundPrimaryDataSourceError;
 import org.siu.rukawa.datasource.core.model.DataSourceContainer;
@@ -10,6 +11,7 @@ import org.siu.rukawa.datasource.core.model.DataSourceDefinition;
 import org.siu.rukawa.datasource.core.provider.DataSourceProvider;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.context.ApplicationListener;
 
 import javax.sql.DataSource;
 import java.util.List;
@@ -22,7 +24,7 @@ import java.util.List;
  * @Version 0.0.1
  */
 @Slf4j
-public class DynamicRoutingDataSource extends AbstractRoutingDataSource implements InitializingBean, DisposableBean {
+public class DynamicRoutingDataSource extends AbstractRoutingDataSource implements InitializingBean, DisposableBean , ApplicationListener<AddDataSourceEvent> {
 
     @Setter
     private DataSourceProvider provider;
@@ -61,5 +63,18 @@ public class DynamicRoutingDataSource extends AbstractRoutingDataSource implemen
     public void destroy() throws Exception {
         this.dataSourceContainer.destroy();
     }
+
+    @Override
+    public void onApplicationEvent(AddDataSourceEvent addDataSourceEvent) {
+        // TODO 动态添加数据源
+        log.info("动态添加数据源：{}", addDataSourceEvent.getSource());
+    }
+
+   /* @Async
+    @Order
+    @EventListener(ApplicationEvent.class)
+    public void addDataSourceEventListener(ApplicationEvent event) {
+        log.info("动态添加数据源：{}", event.getSource());
+    }*/
 
 }
