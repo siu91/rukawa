@@ -49,7 +49,8 @@ public abstract class AbstractDataSourceProvider implements DataSourceProvider {
 
 
     @Override
-    public DataSourceDefinition buildOne(DataSourceProperty property){
-        return null;
+    public DataSourceDefinition buildOne(String key, DataSourceProperty property) throws DynamicDataSourceError {
+        DataSource dataSource = dataSourceBuilder.builderDataSource(property);
+        return new DataSourceDefinition(key, dataSource);
     }
 }

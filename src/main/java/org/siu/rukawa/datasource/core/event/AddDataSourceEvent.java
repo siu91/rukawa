@@ -1,5 +1,6 @@
 package org.siu.rukawa.datasource.core.event;
 
+import org.siu.rukawa.datasource.autoconfigure.properties.DataSourceProperty;
 import org.springframework.context.ApplicationEvent;
 
 /**
@@ -14,11 +15,20 @@ import org.springframework.context.ApplicationEvent;
  */
 public class AddDataSourceEvent extends ApplicationEvent {
 
+    private String dsName;
+
+    public String getDsName() {
+        return dsName;
+    }
+
     /**
+     * 数据源配置
      *
-     * @param dsJsonText json 数据源配置
+     * @param dsName
+     * @param property
      */
-    public AddDataSourceEvent(String dsJsonText) {
-        super(dsJsonText);
+    public AddDataSourceEvent(String dsName, DataSourceProperty property) {
+        super(property);
+        this.dsName = dsName;
     }
 }

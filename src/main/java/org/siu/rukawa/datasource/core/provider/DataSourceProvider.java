@@ -20,6 +20,14 @@ public interface DataSourceProvider {
      */
     List<DataSourceDefinition> buildDataSources() throws DynamicDataSourceError;
 
-    DataSourceDefinition buildOne(DataSourceProperty property);
+    /**
+     * 构建单个数据源
+     *
+     * @param key
+     * @param property
+     * @return
+     * @throws DynamicDataSourceError
+     */
+    DataSourceDefinition buildOne(String key, DataSourceProperty property) throws DynamicDataSourceError;
 
 }
