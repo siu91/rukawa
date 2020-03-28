@@ -1,5 +1,6 @@
 package org.siu.rukawa.datasource.core.model;
 
+import com.google.common.collect.ArrayListMultimap;
 import com.p6spy.engine.spy.P6DataSource;
 import io.seata.rm.datasource.DataSourceProxy;
 import lombok.Getter;
@@ -10,14 +11,15 @@ import javax.sql.DataSource;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 
 import org.siu.rukawa.datasource.core.exception.NotFoundPrimaryDataSourceError;
 import org.siu.rukawa.datasource.autoconfigure.properties.Strategy;
+import org.siu.rukawa.datasource.core.strategy.DataSourceLookupStrategy;
+import org.siu.rukawa.datasource.core.strategy.LoadBalanceDataSourceLookupStrategy;
+import org.siu.rukawa.datasource.core.strategy.RandomDataSourceLookupStrategy;
 import org.springframework.util.StringUtils;
 
 /**
@@ -32,38 +34,27 @@ import org.springframework.util.StringUtils;
 public class DataSourceContainer {
 
     /**
-     * 容器ID
-     */
-    @Getter
-    private String id;
-
-    /**
      * 主数据源
      */
     @Getter
     private String primary;
 
-    private Strategy strategy;
+    /**
+     * 数据源查找策略
+     */
+    private DataSourceLookupStrategy strategy;
 
     /**
      * 所有数据源
      */
     @Getter
-    private Map<String, DataSource> dataSources;
-
-    /**
-     * 分组数据源
-     * 分组标识 org.siu.myboot.dds.constant.Constant#UNDERLINE_SPLIT
-     */
-    @Getter
-    private Map<String, DataSourceGroup> groups;
+    private ArrayListMultimap<String, DataSource> dataSources;
 
 
     public DataSourceContainer(String primary, Strategy strategy) {
-        this.id = UUID.randomUUID().toString().replace("-", "");
         this.primary = primary;
-        this.dataSources = new LinkedHashMap<>();
-        this.groups = new ConcurrentHashMap<>();
+        this.strategy = Strategy.RANDOM == strategy ? new RandomDataSourceLookupStrategy() : new LoadBalanceDataSourceLookupStrategy();
+        this.dataSources = ArrayListMultimap.create();
     }
 
 
@@ -72,18 +63,20 @@ public class DataSourceContainer {
      *
      * @return
      */
-    public DataSource lookupDataSource(String key) {
+    public DataSource lookup(String key) {
         log.debug("lookup the datasource [{}]", key);
         if (!StringUtils.hasText(key)) {
             return primary();
         }
-        // 从分组中取
-        if (!this.groups.isEmpty() && groups.containsKey(key)) {
-            return groups.get(key).lookupDataSource(key);
-        }
+
         // 从所有数据源取
-        return this.dataSources.getOrDefault(key, primary());
+        DataSource ds = this.strategy.lookup(this.dataSources.get(key));
+        if (ds == null) {
+            ds = this.primary();
+        }
+        return ds;
     }
+
 
     /**
      * 主数据源
@@ -92,7 +85,7 @@ public class DataSourceContainer {
      */
     private DataSource primary() {
         log.debug("select the primary datasource");
-        return this.getDataSources().get(this.primary);
+        return this.getDataSources().get(this.primary).get(0);
     }
 
 
@@ -128,7 +121,7 @@ public class DataSourceContainer {
      * @throws InvocationTargetException
      */
     public void destroy() throws NoSuchFieldException, IllegalAccessException, InvocationTargetException {
-        for (Map.Entry<String, DataSource> item : this.dataSources.entrySet()) {
+        for (Map.Entry<String, DataSource> item : this.dataSources.entries()) {
             String name = item.getKey();
             DataSource dataSource = item.getValue();
             if (dataSource instanceof DataSourceProxy) {
@@ -159,33 +152,13 @@ public class DataSourceContainer {
     public synchronized void add(DataSourceDefinition dsd) {
         if (!dataSources.containsKey(dsd.getKey())) {
             dataSources.put(dsd.getKey(), dsd.getDataSource());
-            this.addGroup(dsd);
+            // 分组数据源
+            if (StringUtils.hasText(dsd.getGroup())) {
+                dataSources.put(dsd.getGroup(), dsd.getDataSource());
+            }
             log.info("load a datasource [{}] success", dsd.getKey());
         } else {
             log.warn("load a datasource [{}] failed, because it already exist", dsd.getKey());
-        }
-    }
-
-
-    /**
-     * 数据源分组
-     *
-     * @param dsd 数据源定义
-     */
-    private void addGroup(DataSourceDefinition dsd) {
-        if (StringUtils.hasText(dsd.getGroup())) {
-            if (groups.containsKey(dsd.getGroup())) {
-                groups.get(dsd.getGroup()).add(dsd.getDataSource());
-            } else {
-                try {
-                    DataSourceGroup datasourceGroup = new DataSourceGroup(dsd.getGroup(), this.strategy);
-                    datasourceGroup.add(dsd.getDataSource());
-                    groups.put(dsd.getGroup(), datasourceGroup);
-                } catch (Exception e) {
-                    log.error("add datasource [{}] error", dsd.getKey(), e);
-                    dataSources.remove(dsd.getKey());
-                }
-            }
         }
     }
 

@@ -3,7 +3,7 @@ package org.siu.rukawa.datasource.core.strategy;
 
 import javax.sql.DataSource;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.Random;
 
 /**
  * 负载均衡策略实现
@@ -12,13 +12,12 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @Date 2020/3/19 14:09
  * @Version 0.0.1
  */
-public class LoadBalanceDataSourceSelectionStrategy implements DataSourceSelectionStrategy {
+public class RandomDataSourceLookupStrategy implements DataSourceLookupStrategy {
 
-    private AtomicInteger balance = new AtomicInteger(0);
-
+    Random random = new Random();
 
     @Override
     public DataSource lookup(List<DataSource> candidate) {
-        return candidate.get(balance.addAndGet(1) % candidate.size());
+        return candidate.get(random.nextInt(candidate.size()));
     }
 }

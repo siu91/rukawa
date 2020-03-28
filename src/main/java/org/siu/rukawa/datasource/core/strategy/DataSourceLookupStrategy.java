@@ -1,6 +1,7 @@
 package org.siu.rukawa.datasource.core.strategy;
 
 import javax.sql.DataSource;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -10,7 +11,7 @@ import java.util.List;
  * @Date 2020/3/19 14:07
  * @Version 0.0.1
  */
-public interface DataSourceSelectionStrategy {
+public interface DataSourceLookupStrategy {
 
     /**
      * 从候选数据源中挑选数据源

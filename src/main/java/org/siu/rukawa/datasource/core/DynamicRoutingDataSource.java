@@ -62,7 +62,7 @@ public class DynamicRoutingDataSource extends AbstractRoutingDataSource implemen
     @Override
     protected DataSource lookupDataSource() {
         String key = DynamicDataSourceContextHolder.peek();
-        return dataSourceContainer.lookupDataSource(key);
+        return dataSourceContainer.lookup(key);
     }
 
     @Override
