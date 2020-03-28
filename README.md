@@ -23,8 +23,8 @@
 ## Features
 
 - 支持动态多数据源
-- 支持远端接口获取数据源配置
-- 支持动态增加数据源
+- 支持远端接口获取数据源配置（EventPublisher）
+- 支持动态增加数据源（remote.config-endpoint）
 - 支持p6spy监控sql，支持自定义sql日志输出
 - 支持分布式事务seata
 - 支持mybatis插件实现读写分离
@@ -125,11 +125,11 @@
     }
   ```
 
-- 动态添加数据源（监听模式）
+- 在线添加数据源（监听模式）
 
    ```java
       @Resource
-      EventListener eventListener;
+      EventPublisher eventPublisher;
   
       @Test
       public void test() {
@@ -140,7 +140,7 @@
           property.setPassword("");
   
           AddDataSourceEvent event = new AddDataSourceEvent("tets111", property);
-          eventListener.publishEvent(event);
+          eventPublisher.publishEvent(event);
       
       }
    ```
