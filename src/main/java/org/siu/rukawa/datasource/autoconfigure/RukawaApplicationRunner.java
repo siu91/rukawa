@@ -4,6 +4,7 @@ import com.p6spy.engine.spy.P6ModuleManager;
 import com.p6spy.engine.spy.P6SpyDriver;
 import com.p6spy.engine.spy.P6SpyOptions;
 import com.p6spy.engine.spy.option.SystemProperties;
+import org.siu.rukawa.RukawaBanner;
 import org.siu.rukawa.datasource.support.P6SpyMessageFormat;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -21,11 +22,16 @@ import java.util.Map;
  */
 @Configuration(proxyBeanMethods = false)
 @ConditionalOnClass(P6SpyDriver.class)
-public class P6spyAutoConfiguration implements ApplicationRunner {
+public class RukawaApplicationRunner implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) {
-        P6spyAutoConfiguration.p6spyReload();
+        RukawaApplicationRunner.printBanner();
+        RukawaApplicationRunner.p6spyReload();
+    }
+
+    public static void printBanner() {
+        RukawaBanner.printBanner();
     }
 
     public static void p6spyReload() {
