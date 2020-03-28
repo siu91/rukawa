@@ -51,3 +51,4 @@ spring:
         # 数据库连接超时时间,默认30秒，即30000
         connection-timeout: 30000
       strategy: LOAD_BALANCE
+      remote-config-endpoint: "https://www.fastmock.site/mock/3f0e3977225eecebe94d28842267a2e0/myboot/api/rukawa_db_properties"
