@@ -36,7 +36,7 @@ public class DynamicDataSourceProperties implements InitializingBean {
         // 如果 configServer不为空，从远端拉取配置
         if (StringUtils.hasText(this.remoteConfigEndpoint)) {
             // 只配置datasourceMap
-            JSONObject remoteProperties = PropertiesUtil.loadJsonPropertiesFormRemoteServer(this.remoteConfigEndpoint);
+            JSONObject remoteProperties = PropertiesUtil.loadJsonPropertiesFromRemoteServer(this.remoteConfigEndpoint);
             if (remoteProperties != null) {
                 remoteProperties.forEach((k, v) -> {
                     DataSourceProperty dataSourceProperty = JSON.parseObject(v.toString(), DataSourceProperty.class);

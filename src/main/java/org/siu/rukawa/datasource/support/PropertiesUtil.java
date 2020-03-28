@@ -17,7 +17,7 @@ public class PropertiesUtil {
 
     private static final RestTemplate REST_TEMPLATE = new RestTemplate();
 
-    public static JSONObject loadJsonPropertiesFormRemoteServer(String api) {
+    public static JSONObject loadJsonPropertiesFromRemoteServer(String api) {
         Object object = REST_TEMPLATE.getForObject(api, Object.class);
         if (object instanceof HashMap) {
             HashMap<String, Object> ret = (HashMap<String, Object>) object;
