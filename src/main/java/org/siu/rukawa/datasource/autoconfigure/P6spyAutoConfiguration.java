@@ -14,9 +14,6 @@ import java.util.Map;
 
 /**
  * 应用启动时自动配置p6spy
- * <p>
- * 默认配置 enabled=true 或“未配置”都会自动配置
- * 关闭需要显示配置 ：p6spy.config.enabled = false
  *
  * @Author Siu
  * @Date 2020/2/22 16:48
