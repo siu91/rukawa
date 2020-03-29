@@ -14,7 +14,7 @@ public class ChainHandlerBuilder {
 
     public static AbstractDataSourceChainHandler buildChainHandler(ChainHandlerOrder order) {
         AbstractDataSourceChainHandler chainHandler;
-        AbstractDataSourceChainHandler requestHeaderDataSourceHandler = new RequestHeaderDataSourceHandler();
+        AbstractDataSourceChainHandler requestHeaderDataSourceHandler = new HeaderDataSourceHandler();
         AbstractDataSourceChainHandler sessionDataSourceHandler = new SessionDataSourceHandler();
         AbstractDataSourceChainHandler spELDataSourceHandler = new SpELDataSourceHandler();
         switch (order) {

@@ -13,7 +13,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
  * @Date 2020/3/19 22:33
  * @Version 0.0.1
  */
-public class RequestHeaderDataSourceHandler extends AbstractDataSourceChainHandler {
+public class HeaderDataSourceHandler extends AbstractDataSourceChainHandler {
 
     @Override
     public boolean matcher(String key) {
