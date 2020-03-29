@@ -4,14 +4,12 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.siu.rukawa.datasource.test.param.Param;
 import org.siu.rukawa.datasource.test.service.UserService;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.Optional;
+
 
 /**
- * 统一认证、授权
  *
  * @Author Siu
  * @Date 2020/3/4 16:23
