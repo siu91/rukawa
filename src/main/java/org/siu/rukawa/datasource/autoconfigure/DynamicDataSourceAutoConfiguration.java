@@ -129,7 +129,9 @@ public class DynamicDataSourceAutoConfiguration {
         DataSourceAnnotationInterceptor interceptor = new DataSourceAnnotationInterceptor();
         interceptor.setDynamicChainHandler(dynamicFetchDataSourceNameChainHandler);
         log.info("初始化数据源AOP处理");
-        return new DataSourceAnnotationAdvisor(interceptor);
+        DataSourceAnnotationAdvisor advisor = new DataSourceAnnotationAdvisor(interceptor);
+        advisor.setOrder(this.properties.getOrder());
+        return advisor;
     }
 
 
