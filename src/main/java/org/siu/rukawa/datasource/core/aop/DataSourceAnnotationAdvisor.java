@@ -33,7 +33,6 @@ public class DataSourceAnnotationAdvisor extends AbstractPointcutAdvisor impleme
         Pointcut classLevelPointCut = new AnnotationMatchingPointcut(DataSource.class, true);
         Pointcut methodLevelPointCut = AnnotationMatchingPointcut.forMethodAnnotation(DataSource.class);
         this.pointcut = new ComposablePointcut(classLevelPointCut).union(methodLevelPointCut);
-        this.setOrder(Ordered.HIGHEST_PRECEDENCE);
     }
 
     @Override
