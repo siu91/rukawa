@@ -94,10 +94,10 @@
         </dependency>
 
         <!--postgres 驱动-->
-        <dependency>
+      <!--  <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-        </dependency>
+        </dependency>-->
 
         <dependency>
             <groupId>org.mybatis</groupId>
@@ -135,11 +135,11 @@
         </dependency>
         <!--h2 数据库用于测试-->
 
-        <dependency>
+      <!--  <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
             <scope>runtime</scope>
-        </dependency>
+        </dependency>-->
 
 
     </dependencies>
