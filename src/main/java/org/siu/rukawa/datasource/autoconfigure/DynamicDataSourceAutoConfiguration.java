@@ -51,7 +51,7 @@ public class DynamicDataSourceAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean
     public EventPublisher eventListener() {
-        log.info("初始化全局事件发布器");
+        log.info("[初始化]-全局事件发布器");
         return new EventPublisher();
     }
 
@@ -64,7 +64,7 @@ public class DynamicDataSourceAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean
     public DataSourceBuilder dataSourceBuilder() {
-        log.info("初始化数据源构建器");
+        log.info("[初始化]-数据源构建器");
         return new DataSourceBuilder(properties);
     }
 
@@ -84,7 +84,7 @@ public class DynamicDataSourceAutoConfiguration {
         AbstractDataSourceWarp seataDataSourceWarp = new SeataDataSourceWarp();
         seataDataSourceWarp.setSupport(properties.getSeata());
         p6spyDataSourceWarp.setNextWarp(seataDataSourceWarp);
-        log.info("初始化数据源包装器");
+        log.info("[初始化]-数据源包装器");
         return p6spyDataSourceWarp;
     }
 
@@ -99,7 +99,7 @@ public class DynamicDataSourceAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean
     public DataSourceProvider dynamicDataSourceProvider() {
-        log.info("初始化数据源提供者");
+        log.info("[初始化]-数据源提供者");
         return new YmlDataSourceProvider();
     }
 
@@ -113,7 +113,7 @@ public class DynamicDataSourceAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean
     public ChainHandler dynamicFetchDataSourceNameChainHandler() {
-        log.info("初始化数据源获取处理器");
+        log.info("[初始化]-数据源标识获取处理器");
         return ChainHandlerBuilder.buildChainHandler(this.properties.getHandlerOrder());
     }
 
@@ -128,7 +128,7 @@ public class DynamicDataSourceAutoConfiguration {
     public DataSourceAnnotationAdvisor dataSourceAnnotationAdvisor(ChainHandler dynamicFetchDataSourceNameChainHandler) {
         DataSourceAnnotationInterceptor interceptor = new DataSourceAnnotationInterceptor();
         interceptor.setDynamicChainHandler(dynamicFetchDataSourceNameChainHandler);
-        log.info("初始化数据源AOP处理");
+        log.info("[初始化]-AOP处理");
         DataSourceAnnotationAdvisor advisor = new DataSourceAnnotationAdvisor(interceptor);
         advisor.setOrder(this.properties.getOrder());
         return advisor;
@@ -142,7 +142,7 @@ public class DynamicDataSourceAutoConfiguration {
         dynamicRoutingDataSource.setPrimary(this.properties.getPrimary());
         dynamicRoutingDataSource.setProvider(provider);
         dynamicRoutingDataSource.setStrategy(this.properties.getStrategy());
-        log.info("初始化动态数据源");
+        log.info("[初始化]-动态数据源");
         return dynamicRoutingDataSource;
     }
 
