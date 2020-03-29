@@ -72,12 +72,12 @@
             <artifactId>spring-boot-starter-jdbc</artifactId>
         </dependency>
 
-        <dependency>
+<!--        <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>druid-spring-boot-starter</artifactId>
             <version>1.1.21</version>
             <optional>true</optional>
-        </dependency>
+        </dependency>-->
 
         <!-- alibaba fastjson -->
         <dependency>
@@ -141,12 +141,6 @@
             <scope>runtime</scope>
         </dependency>
 
-        <!--JOOQ-->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-jooq</artifactId>
-            <scope>test</scope>
-        </dependency>
 
     </dependencies>
 
