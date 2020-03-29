@@ -89,6 +89,10 @@ public class DynamicDataSourceProperties implements InitializingBean {
      */
     private Map<String, DataSourceProperty> datasourceMap = new LinkedHashMap<>();
     /**
+     * 自定义切点
+     */
+    private Map<String, CustomPointcutProperty> customPointcut = new LinkedHashMap<>();
+    /**
      * 分组数据源时，选择算法,默认一组数据源内使用负载均衡算法
      */
     private Strategy strategy = Strategy.LOAD_BALANCE;

@@ -33,3 +33,9 @@ spring:
         # 数据库连接超时时间,默认30秒，即30000
         connection-timeout: 30000
       strategy: LOAD_BALANCE
+      customPointcut:
+        ds1:
+          type: REGEXP
+          matchers:
+            - "test1"
+            - "test2"

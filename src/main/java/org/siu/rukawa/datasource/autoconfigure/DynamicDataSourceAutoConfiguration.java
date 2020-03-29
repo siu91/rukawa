@@ -3,8 +3,12 @@ package org.siu.rukawa.datasource.autoconfigure;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.siu.rukawa.datasource.autoconfigure.properties.DynamicDataSourceProperties;
+import org.siu.rukawa.datasource.cache.MatcherCache;
 import org.siu.rukawa.datasource.core.DynamicRoutingDataSource;
 import org.siu.rukawa.datasource.core.aop.DataSourceAnnotationAdvisor;
+import org.siu.rukawa.datasource.core.aop.custom.DataSourceAdvisor;
+import org.siu.rukawa.datasource.core.aop.custom.interceptor.CustomDataSourceInterceptor;
+import org.siu.rukawa.datasource.core.aop.custom.matcher.Matcher;
 import org.siu.rukawa.datasource.core.aop.handler.*;
 import org.siu.rukawa.datasource.core.aop.interceptor.DataSourceAnnotationInterceptor;
 import org.siu.rukawa.datasource.core.event.EventPublisher;
@@ -15,6 +19,7 @@ import org.siu.rukawa.datasource.core.provider.warp.AbstractDataSourceWarp;
 import org.siu.rukawa.datasource.core.provider.warp.DataSourceWarp;
 import org.siu.rukawa.datasource.core.provider.warp.P6spyDataSourceWarp;
 import org.siu.rukawa.datasource.core.provider.warp.SeataDataSourceWarp;
+import org.siu.rukawa.datasource.support.PropertiesUtil;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -22,8 +27,10 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
 
 import javax.sql.DataSource;
+import java.util.List;
 
 
 /**
@@ -43,8 +50,9 @@ public class DynamicDataSourceAutoConfiguration {
 
     private final DynamicDataSourceProperties properties;
 
+
     /**
-     * 全局事件监听
+     * 全局事件发布器
      *
      * @return
      */
@@ -53,6 +61,18 @@ public class DynamicDataSourceAutoConfiguration {
     public EventPublisher eventListener() {
         log.info("[初始化]-全局事件发布器");
         return new EventPublisher();
+    }
+
+    /**
+     * 自定义切点缓存容器
+     *
+     * @return
+     */
+    @Bean
+    @ConditionalOnMissingBean
+    public MatcherCache matcherCache() throws Exception {
+        log.info("[初始化]-自定义切点缓存容器");
+        return new MatcherCache();
     }
 
 
@@ -128,9 +148,29 @@ public class DynamicDataSourceAutoConfiguration {
     public DataSourceAnnotationAdvisor dataSourceAnnotationAdvisor(ChainHandler dynamicFetchDataSourceNameChainHandler) {
         DataSourceAnnotationInterceptor interceptor = new DataSourceAnnotationInterceptor();
         interceptor.setDynamicChainHandler(dynamicFetchDataSourceNameChainHandler);
-        log.info("[初始化]-AOP处理");
         DataSourceAnnotationAdvisor advisor = new DataSourceAnnotationAdvisor(interceptor);
         advisor.setOrder(this.properties.getOrder());
+        log.info("[初始化]-AOP处理(dataSourceAnnotationAdvisor)");
+        return advisor;
+    }
+
+    /**
+     * 配置AOP
+     *
+     * @param matcherCache
+     * @param dynamicFetchDataSourceNameChainHandler
+     * @return
+     */
+    @Bean
+    @ConditionalOnMissingBean
+    public DataSourceAdvisor dataSourceAdvisor(MatcherCache matcherCache, ChainHandler dynamicFetchDataSourceNameChainHandler) {
+        CustomDataSourceInterceptor interceptor = new CustomDataSourceInterceptor();
+        interceptor.setDynamicChainHandler(dynamicFetchDataSourceNameChainHandler);
+        interceptor.setCache(matcherCache);
+        List<Matcher> matchers = PropertiesUtil.toMatchers(this.properties.getCustomPointcut());
+        DataSourceAdvisor advisor = new DataSourceAdvisor(interceptor, matcherCache, matchers);
+        advisor.setOrder(Ordered.HIGHEST_PRECEDENCE);
+        log.info("[初始化]-AOP处理(dataSourceAdvisor)");
         return advisor;
     }
 

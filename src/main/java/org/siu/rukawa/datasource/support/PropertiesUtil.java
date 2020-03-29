@@ -3,9 +3,17 @@ package org.siu.rukawa.datasource.support;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import lombok.experimental.UtilityClass;
+import org.siu.rukawa.datasource.autoconfigure.properties.CustomPointcut;
+import org.siu.rukawa.datasource.autoconfigure.properties.CustomPointcutProperty;
+import org.siu.rukawa.datasource.core.aop.custom.matcher.ExpressionMatcher;
+import org.siu.rukawa.datasource.core.aop.custom.matcher.Matcher;
+import org.siu.rukawa.datasource.core.aop.custom.matcher.RegexMatcher;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @Author Siu
@@ -27,6 +35,32 @@ public class PropertiesUtil {
             }
         }
         return null;
+    }
+
+    /**
+     * 自定义切点转换
+     *
+     * @param customPointcut
+     * @return
+     */
+    public static List<Matcher> toMatchers(Map<String, CustomPointcutProperty> customPointcut) {
+        List<Matcher> matchers = new LinkedList<>();
+        customPointcut.forEach((k, v) -> {
+            if (CustomPointcut.EXPRESSION == v.getType()) {
+                for (String m : v.getMatchers()) {
+                    matchers.add(new ExpressionMatcher(m, v.getDs()));
+                }
+            }
+            if (CustomPointcut.REGEXP == v.getType()) {
+                int size = v.getMatchers().size();
+                matchers.add(new RegexMatcher(v.getMatchers().toArray(new String[size]), v.getDs()));
+
+            }
+
+
+        });
+
+        return matchers;
     }
 
 
