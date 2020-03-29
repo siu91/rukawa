@@ -73,7 +73,7 @@ public class DynamicRoutingDataSource extends AbstractRoutingDataSource implemen
     @SneakyThrows
     @Override
     public void onApplicationEvent(AddDataSourceEvent addDataSourceEvent) {
-        log.info("动态添加数据源：{}", addDataSourceEvent.getDsName());
+        log.info("在线添加数据源：{}", addDataSourceEvent.getDsName());
         DataSourceProperty property = (DataSourceProperty) addDataSourceEvent.getSource();
         DataSourceDefinition dataSourceDefinition = this.provider.buildOne(addDataSourceEvent.getDsName(), property);
         // TODO 判断是否重复的数据源配置，按照什么策略处理
