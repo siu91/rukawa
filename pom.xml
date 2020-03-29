@@ -54,6 +54,11 @@
     </properties>
 
     <dependencies>
+        <!--必须开启aop-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
         <!--lombok 代码工具-->
         <dependency>
             <groupId>org.projectlombok</groupId>
