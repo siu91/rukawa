@@ -60,6 +60,12 @@ public class DynamicDataSourceProperties implements InitializingBean {
 
 
     /**
+     * 缓存需要匹配的的切点（方法），配置需要扫描的包，非空时生效
+     */
+    private String matcherCachePackage;
+
+
+    /**
      * 远端配置服务端接口：默认为空，有效配置后，会从远端拉取配置覆盖本地
      */
     private String remoteConfigEndpoint;
