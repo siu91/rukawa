@@ -1,7 +1,7 @@
 package org.siu.rukawa.datasource.core.aop.custom;
 
 import lombok.NonNull;
-import org.aopalliance.aop.Advice;
+import org.siu.rukawa.datasource.core.aop.AbstractRukawaAdvisor;
 import org.siu.rukawa.datasource.core.cache.MatcherCache;
 import org.siu.rukawa.datasource.core.anotation.DataSource;
 import org.siu.rukawa.datasource.core.aop.custom.interceptor.CustomDataSourceInterceptor;
@@ -11,11 +11,7 @@ import org.siu.rukawa.datasource.core.aop.custom.matcher.RegexMatcher;
 import org.siu.rukawa.datasource.core.aop.custom.pointcut.CustomAspectJExpressionPointcut;
 import org.siu.rukawa.datasource.core.aop.custom.pointcut.CustomJdkRegexpPointcut;
 import org.springframework.aop.Pointcut;
-import org.springframework.aop.support.AbstractPointcutAdvisor;
 import org.springframework.aop.support.ComposablePointcut;
-import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.BeanFactory;
-import org.springframework.beans.factory.BeanFactoryAware;
 
 import java.util.List;
 
@@ -27,45 +23,27 @@ import java.util.List;
  * @Version 0.0.1
  * @see DataSource
  */
-public class DataSourceAdvisor extends AbstractPointcutAdvisor implements BeanFactoryAware {
+public class DataSourceAdvisor extends AbstractRukawaAdvisor {
 
-    private MatcherCache cache;
-
-    private Advice advice;
-
-    private Pointcut pointcut;
+    private List<Matcher> matchers;
 
     public DataSourceAdvisor(@NonNull CustomDataSourceInterceptor interceptor, @NonNull MatcherCache cache, @NonNull List<Matcher> matchers) {
-        this.advice = interceptor;
-        this.cache = cache;
-        // 设置切点
-        this.pointcut = this.buildPointcut(matchers);
+        super(interceptor, cache);
+        this.matchers = matchers;
 
     }
 
     @Override
-    public Pointcut getPointcut() {
-        return this.pointcut;
-    }
-
-    @Override
-    public Advice getAdvice() {
-        return this.advice;
+    public Pointcut buildPointcut() {
+        return buildPointcut(this.matchers);
     }
 
     /**
-     * 实现BeanFactoryAware的bean中获取beanFactory
+     * 构建切点
      *
-     * @param beanFactory
-     * @throws BeansException
+     * @param matchers
+     * @return
      */
-    @Override
-    public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
-        if (this.advice instanceof BeanFactoryAware) {
-            ((BeanFactoryAware) this.advice).setBeanFactory(beanFactory);
-        }
-    }
-
     private Pointcut buildPointcut(List<Matcher> matchers) {
         ComposablePointcut composablePointcut = null;
         for (Matcher matcher : matchers) {
