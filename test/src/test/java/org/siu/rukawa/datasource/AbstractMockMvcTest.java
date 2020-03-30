@@ -17,7 +17,7 @@ import org.springframework.web.context.WebApplicationContext;
 @RunWith(SpringRunner.class)
 @AutoConfigureMockMvc
 @ActiveProfiles("rukawa-test")
-@SpringBootTest(classes = RukawaTestApplication.class,webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+@SpringBootTest(classes = RukawaTestApplication.class,webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public abstract class AbstractMockMvcTest {
 
     @Autowired

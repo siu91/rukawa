@@ -165,8 +165,8 @@ public class DynamicDataSourceAutoConfiguration {
      * @param dynamicFetchDataSourceNameChainHandler
      * @return
      */
-    @Bean
-    @ConditionalOnMissingBean
+   // @Bean
+    //@ConditionalOnMissingBean
     public DataSourceAdvisor dataSourceAdvisor(MatcherCache matcherCache, ChainHandler dynamicFetchDataSourceNameChainHandler) {
         CustomDataSourceInterceptor interceptor = new CustomDataSourceInterceptor();
         interceptor.setDynamicChainHandler(dynamicFetchDataSourceNameChainHandler);
