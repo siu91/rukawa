@@ -1,4 +1,4 @@
-package org.siu.rukawa.datasource.core.aop.custom.pointcut;
+package org.siu.rukawa.datasource.core.aop.pointcut;
 
 import org.siu.rukawa.datasource.core.cache.MatcherCache;
 import org.springframework.aop.support.JdkRegexpMethodPointcut;

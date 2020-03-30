@@ -1,4 +1,4 @@
-package org.siu.rukawa.datasource.core.aop.custom.interceptor;
+package org.siu.rukawa.datasource.core.aop.pointcut;
 
 
 import lombok.Setter;

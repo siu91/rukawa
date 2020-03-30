@@ -1,7 +1,8 @@
-package org.siu.rukawa.datasource.core.aop.custom.matcher;
+package org.siu.rukawa.datasource.core.aop.matcher;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+
 
 /**
  * @Author Siu
@@ -10,9 +11,9 @@ import lombok.Data;
  */
 @AllArgsConstructor
 @Data
-public class ExpressionMatcher implements Matcher {
+public class RegexMatcher implements Matcher {
 
-    private String expression;
+    private String[] patterns;
 
     private String ds;
 }

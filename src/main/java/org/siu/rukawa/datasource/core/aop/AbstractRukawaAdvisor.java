@@ -4,7 +4,6 @@ import lombok.NonNull;
 import org.aopalliance.aop.Advice;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.siu.rukawa.datasource.core.anotation.DataSource;
-import org.siu.rukawa.datasource.core.aop.custom.interceptor.CustomDataSourceInterceptor;
 import org.siu.rukawa.datasource.core.cache.MatcherCache;
 import org.springframework.aop.Pointcut;
 import org.springframework.aop.support.AbstractPointcutAdvisor;
