@@ -2,6 +2,7 @@ package org.siu.rukawa.datasource.core.aop;
 
 import lombok.NonNull;
 import org.aopalliance.aop.Advice;
+import org.aopalliance.intercept.MethodInterceptor;
 import org.siu.rukawa.datasource.core.anotation.DataSource;
 import org.siu.rukawa.datasource.core.aop.custom.interceptor.CustomDataSourceInterceptor;
 import org.siu.rukawa.datasource.core.cache.MatcherCache;
@@ -28,7 +29,7 @@ public abstract class AbstractRukawaAdvisor extends AbstractPointcutAdvisor impl
 
     protected Pointcut pointcut;
 
-    public AbstractRukawaAdvisor(@NonNull CustomDataSourceInterceptor interceptor, @NonNull MatcherCache cache) {
+    public AbstractRukawaAdvisor(@NonNull MethodInterceptor interceptor, MatcherCache cache) {
         this.advice = interceptor;
         this.cache = cache;
         // 设置切点

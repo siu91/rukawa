@@ -1,17 +1,11 @@
 package org.siu.rukawa.datasource.core.aop;
 
 import lombok.NonNull;
-import org.aopalliance.aop.Advice;
 import org.siu.rukawa.datasource.core.anotation.DataSource;
 import org.siu.rukawa.datasource.core.aop.interceptor.DataSourceAnnotationInterceptor;
 import org.springframework.aop.Pointcut;
-import org.springframework.aop.support.AbstractPointcutAdvisor;
 import org.springframework.aop.support.ComposablePointcut;
 import org.springframework.aop.support.annotation.AnnotationMatchingPointcut;
-import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.BeanFactory;
-import org.springframework.beans.factory.BeanFactoryAware;
-import org.springframework.core.Ordered;
 
 /**
  * AOP 处理DataSource注解
@@ -21,40 +15,20 @@ import org.springframework.core.Ordered;
  * @Version 0.0.1
  * @see org.siu.rukawa.datasource.core.anotation.DataSource
  */
-public class DataSourceAnnotationAdvisor extends AbstractPointcutAdvisor implements BeanFactoryAware {
+public class DataSourceAnnotationAdvisor extends AbstractRukawaAdvisor {
 
-    private Advice advice;
-
-    private Pointcut pointcut;
 
     public DataSourceAnnotationAdvisor(@NonNull DataSourceAnnotationInterceptor interceptor) {
+        super(interceptor, null);
         this.advice = interceptor;
+    }
+
+
+    @Override
+    public Pointcut buildPointcut() {
         // 设置切点
         Pointcut classLevelPointCut = new AnnotationMatchingPointcut(DataSource.class, true);
         Pointcut methodLevelPointCut = AnnotationMatchingPointcut.forMethodAnnotation(DataSource.class);
-        this.pointcut = new ComposablePointcut(classLevelPointCut).union(methodLevelPointCut);
-    }
-
-    @Override
-    public Pointcut getPointcut() {
-        return this.pointcut;
-    }
-
-    @Override
-    public Advice getAdvice() {
-        return this.advice;
-    }
-
-    /**
-     * 实现BeanFactoryAware的bean中获取beanFactory
-     *
-     * @param beanFactory
-     * @throws BeansException
-     */
-    @Override
-    public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
-        if (this.advice instanceof BeanFactoryAware) {
-            ((BeanFactoryAware) this.advice).setBeanFactory(beanFactory);
-        }
+        return new ComposablePointcut(classLevelPointCut).union(methodLevelPointCut);
     }
 }
