@@ -40,7 +40,7 @@
       <dependency>
         <groupId>org.siu</groupId>
         <artifactId>rukawa</artifactId>
-        <version>1.0.0.RC1</version>
+        <version>1.0.0.RC2</version>
       </dependency>
   ```
 
