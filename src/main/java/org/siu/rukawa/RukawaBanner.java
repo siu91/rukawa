@@ -18,6 +18,7 @@ public class RukawaBanner {
 
     private static final String[] BANNER = {
             "",
+            " _____ ",
             "| ___ \\    | |",
             "| |_/ /   _| | ____ ___      ____ _",
             "|    / | | | |/ / _` \\ \\ /\\ / / _` |",
