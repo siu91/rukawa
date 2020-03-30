@@ -7,7 +7,7 @@ import org.siu.rukawa.datasource.core.cache.*;
 import org.siu.rukawa.datasource.core.DynamicRoutingDataSource;
 import org.siu.rukawa.datasource.core.aop.DataSourceAnnotationAdvisor;
 import org.siu.rukawa.datasource.core.aop.DataSourceAdvisor;
-import org.siu.rukawa.datasource.core.aop.pointcut.CustomDataSourceInterceptor;
+import org.siu.rukawa.datasource.core.aop.interceptor.CustomDataSourceInterceptor;
 import org.siu.rukawa.datasource.core.aop.matcher.Matcher;
 import org.siu.rukawa.datasource.core.aop.handler.*;
 import org.siu.rukawa.datasource.core.aop.interceptor.DataSourceAnnotationInterceptor;
