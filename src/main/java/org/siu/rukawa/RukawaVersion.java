@@ -1,6 +1,5 @@
 package org.siu.rukawa;
 
-import org.springframework.boot.SpringBootVersion;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,18 +11,14 @@ import java.util.jar.Attributes;
 import java.util.jar.JarFile;
 
 /**
+ * 获取Rukawa版本
+ *
  * @Author Siu
  * @Date 2020/3/28 20:57
  * @Version 0.0.1
  */
 public class RukawaVersion {
 
-    /**
-     * Return the full version string of the present Spring Boot codebase, or {@code null}
-     * if it cannot be determined.
-     * @return the version of Spring Boot or {@code null}
-     * @see Package#getImplementationVersion()
-     */
     public static String getVersion() {
         return determineVersion();
     }
@@ -46,8 +41,7 @@ public class RukawaVersion {
             try (JarFile jarFile = new JarFile(new File(codeSourceLocation.toURI()))) {
                 return getImplementationVersion(jarFile);
             }
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             return null;
         }
     }
