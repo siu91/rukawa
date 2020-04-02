@@ -84,53 +84,109 @@
 - @DataSource使用
 
   ```java
-  // 推荐在方法上使用
-    // 如：你在控制层class上使用，但是其他人添加了某块代码并不需要动态切换数据源
-    
-    
-    // Usage1:在控制层Class使用注解
-    @RestController
-    @DataSource("slave1_1") 
-    // Or @DataSource("#header.request_ds") // HttpRequest header 添加 request_ds='slave1_1'
-    // Or @DataSource("#session.request_ds") // HttpRequest session 添加 request_ds='slave1_1'
-    public class Controller {
-    }
-    
-    // Usage2:在Method上使用注解
-    public class ServiceImpl implements Service {
-    
-      @Override
-      @DataSource("#session.request_ds")
-      public Object session() {
-        // do something
-      }
-    
-      @Override
-      @DataSource("#header.request_ds")
+  /**
+   *
+   * @Author Siu
+   * @Date 2020/3/4 16:23
+   * @Version 0.0.1
+   */
+  @Slf4j
+  @RestController
+  @RequestMapping("/v1/api")
+  public class UserController {
+  
+  
+      @Resource
+      private UserService userService;
+  
+  
+      @GetMapping("/get_ds_from_header")
       public Object header() {
-        // do something
+          userService.getDsFromHeader();
+          return "success";
       }
-    
-      @Override
-      @DataSource("#requestObj.ds")
-      public Object spEL(RequestObj requestObj) {
-        // do something
+  
+      @GetMapping("/get_ds_from_session")
+      public Object session() {
+          userService.getDsFromSession();
+          return "success";
       }
-    
-      @Override
-      @DataSource("slave1_1")
-      public Object derict() {
-        // do something
+  
+      @GetMapping("/get_ds_from_param")
+      public Object param(String ds) {
+          userService.getDsFromParam(new Param(ds));
+          return "success";
       }
-    }
+  
+  }
+  
+  /**
+   * @Author Siu
+   * @Date 2020/3/29 9:31
+   * @Version 0.0.1
+   */
+  @Slf4j
+  @Service
+  @DataSource("primary")
+  public class UserService {
+  
+      @Resource
+      DSLContext dsl;
+  
+      private static final Random random = new Random();
+  
+      @DataSource("#header.ds")
+      public void getDsFromHeader() {
+          dsl.insertInto(Users.USERS, Users.USERS.ID, Users.USERS.NAME, Users.USERS.AGE, Users.USERS.PASS)
+                  .values(random.nextLong(), "siu", 29, "pass").execute();
+      }
+  
+      @DataSource("#session.ds")
+      public void getDsFromSession() {
+          dsl.insertInto(Users.USERS, Users.USERS.ID, Users.USERS.NAME, Users.USERS.AGE, Users.USERS.PASS)
+                  .values(random.nextLong(), "siu", 29, "pass").execute();
+      }
+  
+      @DataSource("#param.ds")
+      public void getDsFromParam(Param param) {
+          log.info("ds:[{}]", param.getDs());
+          dsl.insertInto(Users.USERS, Users.USERS.ID, Users.USERS.NAME, Users.USERS.AGE, Users.USERS.PASS)
+                  .values(random.nextLong(), "siu", 29, "pass").execute();
+      }
+  
+  
   ```
+  
+- 远程服务中获取DB配置
+
+   ```txt
+   # 从远端服务加载数据源配置（会覆盖本地配置）
+   config-endpoint: "https://xxx/api/rukawa_db_properties"
+   
+   接口需返回JSON：
+   {
+     "code":200,
+     "message":"success",
+     "data":{
+       "master":{
+         "url":"jdbc:h2:mem:test",
+         "driver-class-name":"org.h2.Driver",
+         "username":"sa",
+         "password":""
+   
+       }
+     }
+   }
+   ```
+
+   
 
 - 在线添加数据源（监听模式）
 
    ```java
       @Resource
       EventPublisher eventPublisher;
-  
+    
       @Test
       public void test() {
           DataSourceProperty property = new DataSourceProperty();
@@ -138,14 +194,12 @@
           property.setUrl("jdbc:h2:mem:test");
           property.setUsername("sa");
           property.setPassword("");
-  
+    
           AddDataSourceEvent event = new AddDataSourceEvent("tets111", property);
           eventPublisher.publishEvent(event);
       
       }
    ```
-
-  
 
 ## TODO
 
